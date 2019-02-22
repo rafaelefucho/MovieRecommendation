@@ -1,13 +1,18 @@
 package com.company;
 
 import com.company.Model.Movie;
+import com.company.Model.SlopeOne;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+// I borrowed the data from here for educational purposes.
+//https://github.com/RayhaanPirani/movie-recommendation-duke/tree/master/MovieRecommendationFramework/data
 
 public class Main {
 
@@ -16,68 +21,45 @@ public class Main {
 
 
         Map<Integer, Map<Integer, Integer>> usersWithRatings = loadUserRatingData();
-        Map<Integer, Movie> movieMap = loadMovieData();
-
-
-        
 
 
 
-    }
+        SlopeOne so = new SlopeOne(usersWithRatings);
 
-    private static Map<Integer,Movie> loadMovieData() {
+        //so.print(usersWithRatings.get(2));
 
-        Map<Integer, Movie> data = new HashMap<>();
+        //so.printMatrixesOfUser(2);
 
-        String csvFile = "src/data/ratedmoviesfull.csv";
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
-        int i=0;
-        try {
+        //so.printData();
 
-            br = new BufferedReader(new FileReader(csvFile));
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                i++;
-                // use comma as separator
-                String[] columns = line.split(cvsSplitBy);
+        //System.out.println(so.predict(5));
 
-                int movieId = Integer.parseInt(columns[0]);
-                String title = columns[1];
-                int year = Integer.parseInt(columns[2]);
-                String country = columns[3];
-                String genre = columns[4];
-                String director = columns[5];
-                int minutes = Integer.parseInt(columns[6]);
-                String poster = columns[7];
+        int user = 100;
 
-                Movie movieTemp = new Movie(title,year,country,genre,director,minutes,poster);
+        Map<Integer,Double> prediction = so.predict(2);
 
-                data.put(movieId,movieTemp);
+        so.print(usersWithRatings.get(2));
 
-            }
+        System.out.println();
 
-            return data;
+        prediction = prediction.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(100)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
 
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        Map<Integer, Movie> movieMap = so.getMovieMap();
+
+        for(int key : prediction.keySet()){
+
+            System.out.format("%45s --> %10.2f \n", movieMap.get(key).getTitle() ,prediction.get(key));
+
         }
 
-        return data;
 
     }
+
+
 
     private static Map<Integer, Map<Integer, Integer>> loadUserRatingData() {
 
