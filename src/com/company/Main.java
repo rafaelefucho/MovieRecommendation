@@ -26,39 +26,91 @@ public class Main {
 
         SlopeOne so = new SlopeOne(usersWithRatings);
 
-        //so.print(usersWithRatings.get(2));
+        loadMovieData();
 
-        //so.printMatrixesOfUser(2);
-
-        //so.printData();
-
-        //System.out.println(so.predict(5));
-
-        int user = 100;
-
-        Map<Integer,Double> prediction = so.predict(2);
-
-        so.print(usersWithRatings.get(2));
-
-        System.out.println();
-
-        prediction = prediction.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(100)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-
-        Map<Integer, Movie> movieMap = so.getMovieMap();
-
-        for(int key : prediction.keySet()){
-
-            System.out.format("%45s --> %10.2f \n", movieMap.get(key).getTitle() ,prediction.get(key));
-
-        }
+//        int user = 325;
+//
+//        Map<Integer,Double> prediction = so.predict(user);
+//
+//        so.print(usersWithRatings.get(user));
+//
+//        System.out.println();
+//
+//        prediction = prediction.entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//                .limit(100)
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+//
+//
+//        Map<Integer, Movie> movieMap = so.getMovieMap();
+//
+//        for(int key : prediction.keySet()){
+//
+//            System.out.format("%45s --> %10.2f \n", movieMap.get(key).getTitle() ,prediction.get(key));
+//
+//        }
 
 
     }
 
+
+    public static void loadMovieData() {
+
+        String csvFile = "src/data/ratedmoviesShort.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+        Set<String> setOfCategorys = new HashSet<>();
+
+        try {
+
+            br = new BufferedReader(new FileReader(csvFile));
+            br.readLine();
+            while ((line = br.readLine()) != null) {
+                // use comma as separator
+                String[] columns = line.split(cvsSplitBy);
+
+                int movieId = Integer.parseInt(columns[0]);
+                String title = columns[1];
+                int year = Integer.parseInt(columns[2]);
+                String country = columns[3];
+                String genre = columns[4];
+                String director = columns[5];
+                int minutes = Integer.parseInt(columns[6]);
+                String poster = columns[7];
+
+                Movie movieTemp = new Movie(title, year, country, genre, director, minutes, poster);
+
+
+
+                String[] genres = genre.replace("\"","").split(",");
+
+                for (String asdf : genres){
+                    setOfCategorys.add(asdf);
+                }
+
+            }
+            System.out.println(setOfCategorys);
+
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+    }
 
 
     private static Map<Integer, Map<Integer, Integer>> loadUserRatingData() {

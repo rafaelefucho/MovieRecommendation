@@ -10,6 +10,13 @@ import java.util.Map;
 
 // https://www.programcreek.com/java-api-examples/index.php?source_dir=HappyResearch-master/happyresearch/src/main/java/happy/research/cf/SlopeOne.java
 
+
+//https://dzone.com/articles/recommendation-engine-models
+
+// Posibles DataSets to work on
+
+
+
 public class SlopeOne {
 
     private Map<Integer, Map<Integer, Integer>> mData;
