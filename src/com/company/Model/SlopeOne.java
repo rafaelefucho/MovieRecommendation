@@ -68,7 +68,7 @@ public class SlopeOne {
                 int minutes = Integer.parseInt(columns[6]);
                 String poster = columns[7];
 
-                Movie movieTemp = new Movie(title, year, country, genre, director, minutes, poster);
+                Movie movieTemp = new Movie(title, year, country, genre, director, minutes, poster, movieId);
 
                 data.put(movieId, movieTemp);
 
@@ -95,12 +95,12 @@ public class SlopeOne {
 
     }
 
-    public Map<Integer, Double> predict(int user)
+    public Map<Integer, Double> predict(Map<Integer, Integer> userToPredict)
     {
 
         //TODO Cambiar esto por un usuario nuevo, con sus propias criticas y realizar una prediccion.
 
-        Map<Integer, Integer> userRatings = mData.get(user);
+        Map<Integer, Integer> userRatings = userToPredict;
 
 
         HashMap<Integer, Double> predictions = new HashMap<>();

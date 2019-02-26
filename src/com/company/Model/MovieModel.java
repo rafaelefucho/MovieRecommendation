@@ -21,13 +21,16 @@ public class MovieModel {
     MovieController movieController;
     Map<Integer, Map<Integer, Integer>> userRatingsData;
 
+    Map<Integer, Integer> currentUserRatings;
+
 
     public MovieModel() {
+
 
         userRatingsData = loadUserRatingData();
         so = new SlopeOne(userRatingsData);
 
-
+        currentUserRatings = new HashMap<>();
 
     }
 
@@ -45,6 +48,8 @@ public class MovieModel {
         String cvsSplitBy = ",";
 
         try {
+
+            Map<Integer, Integer> movieFrequency = new HashMap<>();
 
             br = new BufferedReader(new FileReader(csvFile));
             br.readLine();
@@ -66,10 +71,23 @@ public class MovieModel {
                     data.put(rater_id, tempRating);
                 }
 
+                if (movieFrequency.containsKey(movie_id)) {
+                    movieFrequency.put(movie_id, movieFrequency.get(movie_id) + 1);
+                } else {
+                    movieFrequency.put(movie_id, 1);
+                }
+
 
                 //System.out.println(columns[0] + " " + columns[1] + " " + columns[2] + " " + columns[3] + " ");
 
             }
+
+            movieFrequency = movieFrequency.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .limit(10)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+            System.out.println(movieFrequency);
 
             return data;
 
@@ -114,9 +132,53 @@ public class MovieModel {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+
+            File imageFile = new File("/home/administrateur/IdeaProjects/MovieRecommendation/src/images/noImage.jpeg");
+            try {
+                return ImageIO.read(imageFile);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public Movie getMovieFromId(int movieId) {
+        return so.getMovieMap().get(movieId);
+
+    }
+
+
+    public void addUserRating(int movieId, int value) {
+
+        currentUserRatings.put(movieId, value);
+
+    }
+
+    public Map<Integer, Integer> getCurrentMoviesRated() {
+        return currentUserRatings;
+    }
+
+    public int getNextRecommendation() {
+
+
+        Map<Integer, Double> prediction = so.predict(currentUserRatings);
+
+        prediction = prediction.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        System.out.println(prediction);
+
+        for(int reponse:prediction.keySet()){
+
+            if (!currentUserRatings.containsKey(reponse)){
+                return reponse;
+            }
+        }
+
+        return Integer.parseInt(null);
     }
 }

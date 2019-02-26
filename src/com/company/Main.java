@@ -3,7 +3,6 @@ package com.company;
 import com.company.Controller.MovieController;
 import com.company.Model.Movie;
 import com.company.Model.MovieModel;
-import com.company.Model.SlopeOne;
 import com.company.View.MovieView;
 
 import java.io.BufferedReader;
@@ -11,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 // I borrowed the data from here for educational purposes.
@@ -94,7 +92,7 @@ public class Main {
                 int minutes = Integer.parseInt(columns[6]);
                 String poster = columns[7];
 
-                Movie movieTemp = new Movie(title, year, country, genre, director, minutes, poster);
+                Movie movieTemp = new Movie(title, year, country, genre, director, minutes, poster, movieId);
 
 
 

@@ -1,9 +1,11 @@
 package com.company.Controller;
 
+import com.company.Model.Movie;
 import com.company.Model.MovieModel;
 import com.company.View.MovieView;
 
 import java.awt.*;
+import java.util.Map;
 
 public class MovieController {
 
@@ -27,5 +29,22 @@ public class MovieController {
 
         return movieModel.getImageFromMovieCode(movieCode);
 
+    }
+
+    public Movie getMovieFromId(int movieId) {
+        return movieModel.getMovieFromId(movieId);
+    }
+
+
+    public void addUserRating(int movieId, int value) {
+        movieModel.addUserRating(movieId, value);
+    }
+
+    public Map<Integer,Integer> getCurrentMoviesRated() {
+        return movieModel.getCurrentMoviesRated();
+    }
+
+    public int nextRecomendation() {
+        return movieModel.getNextRecommendation();
     }
 }

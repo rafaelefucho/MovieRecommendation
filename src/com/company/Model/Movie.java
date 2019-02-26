@@ -11,8 +11,9 @@ public class Movie {
     private String director;
     private int minutes;
     private String poster;
+    private int movieId;
 
-    public Movie(String title, int year, String country, String genre, String director, int minutes, String poster) {
+    public Movie(String title, int year, String country, String genre, String director, int minutes, String poster, int movieId) {
         this.title = title;
         this.year = year;
         this.country = country;
@@ -20,11 +21,20 @@ public class Movie {
         this.director = director;
         this.minutes = minutes;
         this.poster = poster;
+        this.movieId = movieId;
     }
 
+    public Movie() {
 
+    }
 
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
 
+    public int getMovieId() {
+        return movieId;
+    }
 
     public String getTitle() {
         return title;
