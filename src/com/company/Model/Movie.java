@@ -22,6 +22,10 @@ public class Movie {
         this.poster = poster;
     }
 
+
+
+
+
     public String getTitle() {
         return title;
     }

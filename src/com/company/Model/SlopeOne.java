@@ -26,11 +26,12 @@ public class SlopeOne {
     private static Map<Integer, Movie> movieMap;
 
 
-
     public SlopeOne(Map<Integer, Map<Integer, Integer>> mData) {
+
         this.mData = mData;
         buildDiffMatrix();
         this.movieMap = loadMovieData();
+
 
 
 
@@ -97,6 +98,8 @@ public class SlopeOne {
     public Map<Integer, Double> predict(int user)
     {
 
+        //TODO Cambiar esto por un usuario nuevo, con sus propias criticas y realizar una prediccion.
+
         Map<Integer, Integer> userRatings = mData.get(user);
 
 
@@ -136,6 +139,9 @@ public class SlopeOne {
         }
         return cleanpredictions;
     }
+
+
+
 
     public void printData() {
         for (int user : mData.keySet()) {
