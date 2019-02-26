@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 // https://www.programcreek.com/java-api-examples/index.php?source_dir=HappyResearch-master/happyresearch/src/main/java/happy/research/cf/SlopeOne.java
@@ -52,6 +51,10 @@ public class SlopeOne {
         int i = 0;
         try {
 
+            Set<String> setCountry = new HashSet<>();
+            Set<String> setDirector = new HashSet<>();
+            Set<String> setGenre = new HashSet<>();
+
             br = new BufferedReader(new FileReader(csvFile));
             br.readLine();
             while ((line = br.readLine()) != null) {
@@ -72,7 +75,21 @@ public class SlopeOne {
 
                 data.put(movieId, movieTemp);
 
+                setCountry.addAll(Arrays.asList(country.replace("\"","").split(",")));
+                setGenre.addAll(Arrays.asList(genre.replace("\"","").split(",")));
+
+
             }
+
+
+
+//            System.out.println(data.size());
+//            System.out.println(setCountry.size());
+//            System.out.println(setGenre.size());
+//
+//            System.out.println(setCountry);
+//            System.out.println(setGenre);
+
 
             return data;
 
@@ -98,7 +115,6 @@ public class SlopeOne {
     public Map<Integer, Double> predict(Map<Integer, Integer> userToPredict)
     {
 
-        //TODO Cambiar esto por un usuario nuevo, con sus propias criticas y realizar una prediccion.
 
         Map<Integer, Integer> userRatings = userToPredict;
 
@@ -141,7 +157,40 @@ public class SlopeOne {
     }
 
 
+    public Map<Integer, Double> weightlesspredict(Map<Integer, Integer> user)
+    {
+        HashMap<Integer, Double> predictions = new HashMap<>();
+        HashMap<Integer, Integer> frequencies = new HashMap<>();
 
+        for (int j : diffMatrix.keySet())
+        {
+            predictions.put(j, 0.0);
+            frequencies.put(j, 0);
+        }
+        for (int j : user.keySet())
+        {
+            for (int k : diffMatrix.keySet())
+            {
+
+                try
+                {
+                //System.out.println("Average diff between "+j+" and "+ k + " is "+mDiffMatrix.get(k).get(j).floatValue()+" with n = "+mFreqMatrix.get(k).get(j).floatValue());
+                Double newval = (diffMatrix.get(k).get(j) + user.get(j));
+                predictions.put(k, predictions.get(k) + newval);
+                } catch (NullPointerException e)
+                {}
+            }
+        }
+        for (int j : predictions.keySet())
+        {
+            predictions.put(j, predictions.get(j) / user.size());
+        }
+        for (int j : user.keySet())
+        {
+            predictions.put(j, (double)user.get(j));
+        }
+        return predictions;
+    }
 
     public void printData() {
         for (int user : mData.keySet()) {

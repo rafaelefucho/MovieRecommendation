@@ -71,23 +71,23 @@ public class MovieModel {
                     data.put(rater_id, tempRating);
                 }
 
-                if (movieFrequency.containsKey(movie_id)) {
-                    movieFrequency.put(movie_id, movieFrequency.get(movie_id) + 1);
-                } else {
-                    movieFrequency.put(movie_id, 1);
-                }
+//                if (movieFrequency.containsKey(movie_id)) {
+//                    movieFrequency.put(movie_id, movieFrequency.get(movie_id) + 1);
+//                } else {
+//                    movieFrequency.put(movie_id, 1);
+//                }
 
 
                 //System.out.println(columns[0] + " " + columns[1] + " " + columns[2] + " " + columns[3] + " ");
 
             }
 
-            movieFrequency = movieFrequency.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                    .limit(10)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-            System.out.println(movieFrequency);
+//            movieFrequency = movieFrequency.entrySet().stream()
+//                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//                    .limit(10)
+//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+//
+//            System.out.println(movieFrequency);
 
             return data;
 
@@ -165,6 +165,7 @@ public class MovieModel {
 
 
         Map<Integer, Double> prediction = so.predict(currentUserRatings);
+//        Map<Integer, Double> prediction = so.weightlesspredict(currentUserRatings);
 
         prediction = prediction.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))

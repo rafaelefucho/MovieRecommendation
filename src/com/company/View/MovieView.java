@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 public class MovieView {
 
@@ -44,7 +45,6 @@ public class MovieView {
     private void makeSomething() {
 
         movieController.addUserRating(currentMovie.getMovieId(),s_sliderRatings.getValue());
-
         updateTableOfMoviesAlreadyRated();
         currentMovie = movieController.getMovieFromId(movieController.nextRecomendation());
         setMovieCentralPanel();
@@ -95,7 +95,13 @@ public class MovieView {
         s_sliderRatings.setMinorTickSpacing(1);
         s_sliderRatings.setValue(5);
 
-        currentMovie = movieController.getMovieFromId(1343092);
+
+        int[] randomMovieToStart = new int[]{993846, 1454468, 770828, 1670345, 816692, 1535109, 2267998, 816711, 1045658, 1343092};
+        Random random = new Random();
+
+
+        currentMovie = movieController.getMovieFromId(randomMovieToStart[random.nextInt(10)]);
+
         setMovieCentralPanel();
 
 
