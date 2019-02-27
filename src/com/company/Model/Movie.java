@@ -165,7 +165,13 @@ public class Movie {
 
         double result = 0;
         for (String keyTemp:movieVectorA.keySet()){
-            result += movieVectorA.get(keyTemp) * movieVectorB.get(keyTemp);
+
+            if (keyTemp.contains("year")||keyTemp.contains("minutes")){
+                result += 1 / (Math.abs(movieVectorA.get(keyTemp) - movieVectorB.get(keyTemp)) + 1);
+            }else {
+                result += movieVectorA.get(keyTemp) * movieVectorB.get(keyTemp);
+            }
+
         }
 
         return result;

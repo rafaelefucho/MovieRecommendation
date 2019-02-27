@@ -47,4 +47,13 @@ public class MovieController {
     public int nextRecomendation() {
         return movieModel.getNextRecommendation();
     }
+
+    public int nextNeighbourh() {
+        return movieModel.getNextNeighborgh();
+    }
+
+    public void setUserRatingsToZero() {
+        movieModel.setUserRatingsToZero();
+
+    }
 }

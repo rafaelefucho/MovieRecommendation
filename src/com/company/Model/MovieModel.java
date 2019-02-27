@@ -36,7 +36,6 @@ public class MovieModel {
 
         itemToItem = new ItemToItem(so.getMovieMap());
 
-        itemToItem.getMovieNeigbourhs(816692);
 
 
     }
@@ -178,7 +177,7 @@ public class MovieModel {
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-        System.out.println(prediction);
+//        System.out.println(prediction);
 
         for(int reponse:prediction.keySet()){
 
@@ -188,5 +187,24 @@ public class MovieModel {
         }
 
         return Integer.parseInt(null);
+    }
+
+    public int getNextNeighborgh() {
+
+        for (int movie:currentUserRatings.keySet()){
+
+            for (int movieNeighbourh: itemToItem.getMovieNeigbourhs(movie).keySet() ){
+                if (!currentUserRatings.containsKey(movieNeighbourh)){
+                    return movieNeighbourh;
+                }
+            }
+        }
+
+        return Integer.parseInt(null);
+
+    }
+
+    public void setUserRatingsToZero() {
+        currentUserRatings.clear();
     }
 }

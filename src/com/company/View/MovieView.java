@@ -3,15 +3,10 @@ package com.company.View;
 import com.company.Controller.MovieController;
 import com.company.Model.Movie;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -27,6 +22,7 @@ public class MovieView {
     private JSlider s_sliderRatings;
     private JButton b_rateByUser;
     private JTable jtable_moviesAlreadyRated;
+    private JButton b_reset;
     private Movie currentMovie;
 
 
@@ -40,14 +36,34 @@ public class MovieView {
 
             }
         });
+        b_reset.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                movieController.setUserRatingsToZero();
+                currentMovie = movieController.getMovieFromId(993846);
+
+                setMovieCentralPanel();
+
+            }
+        });
     }
 
     private void makeSomething() {
 
-        movieController.addUserRating(currentMovie.getMovieId(),s_sliderRatings.getValue());
+
+        movieController.addUserRating(currentMovie.getMovieId(), s_sliderRatings.getValue());
         updateTableOfMoviesAlreadyRated();
-        currentMovie = movieController.getMovieFromId(movieController.nextRecomendation());
+
+        if (s_sliderRatings.getValue() > 7) {
+            currentMovie = movieController.getMovieFromId(movieController.nextNeighbourh());
+        } else {
+            currentMovie = movieController.getMovieFromId(movieController.nextRecomendation());
+        }
+
         setMovieCentralPanel();
+        System.out.println(currentMovie);
 
     }
 
@@ -60,7 +76,7 @@ public class MovieView {
         Object[][] data = new Object[currentMoviesRated.size()][2];
 
         int index = 0;
-        for(int movieId:currentMoviesRated.keySet()) {
+        for (int movieId : currentMoviesRated.keySet()) {
 
             data[index][0] = movieController.getMovieFromId(movieId).getTitle();
             data[index][1] = currentMoviesRated.get(movieId);
@@ -85,7 +101,7 @@ public class MovieView {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
         window.setVisible(true);
-        window.setSize(1024,640);
+        window.setSize(1024, 640);
         window.setLocationRelativeTo(null);
 
         s_sliderRatings.setMinimum(1);
@@ -100,8 +116,9 @@ public class MovieView {
         Random random = new Random();
 
 
-        currentMovie = movieController.getMovieFromId(randomMovieToStart[random.nextInt(10)]);
+//        currentMovie = movieController.getMovieFromId(randomMovieToStart[random.nextInt(10)]);
 
+        currentMovie = movieController.getMovieFromId(993846);
         setMovieCentralPanel();
 
 
@@ -113,7 +130,7 @@ public class MovieView {
 
         l_movieTitle.setText(movieToShow.getTitle());
 
-        l_posterImage.setIcon( new ImageIcon(movieController.getImageFromMovieCode(movieToShow.getMovieId())));
+        l_posterImage.setIcon(new ImageIcon(movieController.getImageFromMovieCode(movieToShow.getMovieId())));
         l_posterImage.setText("");
 
     }

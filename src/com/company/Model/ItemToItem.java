@@ -1,7 +1,10 @@
 package com.company.Model;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ItemToItem {
 
@@ -33,11 +36,16 @@ public class ItemToItem {
         }
     }
 
-    public void getMovieNeigbourhs(int i) {
+    public Map<Integer, Double> getMovieNeigbourhs(int movieId) {
 
 
+        Map<Integer, Double> result = dotProductByPairMatrix.get(movieId).entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
+        result.remove(movieId);
 
+        return result;
 
     }
 }
