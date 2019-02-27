@@ -23,6 +23,8 @@ public class MovieModel {
 
     Map<Integer, Integer> currentUserRatings;
 
+    static ItemToItem itemToItem;
+
 
     public MovieModel() {
 
@@ -31,6 +33,11 @@ public class MovieModel {
         so = new SlopeOne(userRatingsData);
 
         currentUserRatings = new HashMap<>();
+
+        itemToItem = new ItemToItem(so.getMovieMap());
+
+        itemToItem.getMovieNeigbourhs(816692);
+
 
     }
 

@@ -32,8 +32,6 @@ public class SlopeOne {
         this.movieMap = loadMovieData();
 
 
-
-
     }
 
     public static Map<Integer, Movie> getMovieMap() {
@@ -77,7 +75,6 @@ public class SlopeOne {
 
                 setCountry.addAll(Arrays.asList(country.replace("\"","").split(",")));
                 setGenre.addAll(Arrays.asList(genre.replace("\"","").split(",")));
-
 
             }
 
